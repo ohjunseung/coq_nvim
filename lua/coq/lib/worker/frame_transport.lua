@@ -182,7 +182,8 @@ M.spawn_worker = function(fn)
   end)
 
   local start = function()
-    assert(coroutine.running() == nil)
+    local _, is_main = coroutine.running()
+    assert(is_main or coroutine.running() == nil, "entry: must be called outside a coroutine")
     if joiner.closed then
       error(cancel.new(), 0)
     end
