@@ -17,7 +17,8 @@ local M = {
 ---@return F
 M.entry = function(fn)
   return function(...)
-    assert(coroutine.running() == nil, "entry: must be called outside a coroutine")
+    local _, is_main = coroutine.running()
+    assert(is_main or coroutine.running() == nil, "entry: must be called outside a coroutine")
     runtime._detach(runtime.ROOT, fn, ...)
   end
 end
